@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>下载 · 中文口语评估</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="container">
+      <h1>中文口语评估</h1>
+      <p class="tagline">本地分析您的中文口语 · 流利度 · 丰富性 · 生动性</p>
+      <p class="note">无需注册 · 不上传服务器 · 完全在本机运行</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="download-section" id="download">
+      <h2>选择您的系统下载</h2>
+      <p class="hint" id="os-hint"></p>
+
+      <div class="cards">
+        <article class="card" id="card-mac">
+          <div class="platform-icon" aria-hidden="true">&#63743;</div>
+          <h3>macOS</h3>
+          <p class="file-type">.dmg 安装镜像</p>
+          <p class="desc">打开后拖入「应用程序」即可安装</p>
+          <a class="btn btn-mac" href="releases/SpeechEval.dmg" download id="btn-mac">
+            下载 Mac 版
+          </a>
+          <span class="unavailable" id="mac-missing" hidden>安装包尚未上传</span>
+        </article>
+
+        <article class="card" id="card-win">
+          <div class="platform-icon" aria-hidden="true">&#8862;</div>
+          <h3>Windows</h3>
+          <p class="file-type">.exe 安装程序</p>
+          <p class="desc">双击安装向导，按提示完成安装</p>
+          <a class="btn btn-win" href="releases/SpeechEval-Setup.exe" download id="btn-win">
+            下载 Windows 版
+          </a>
+          <span class="unavailable" id="win-missing" hidden>安装包尚未上传</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="steps">
+      <h2>安装说明</h2>
+      <div class="tabs">
+        <button type="button" class="tab active" data-tab="mac">macOS</button>
+        <button type="button" class="tab" data-tab="win">Windows</button>
+      </div>
+      <ol class="step-list" id="steps-mac">
+        <li>双击下载的 <strong>SpeechEval.dmg</strong></li>
+        <li>将窗口中的 <strong>SpeechEval</strong> 拖到 <strong>应用程序</strong> 文件夹</li>
+        <li>从启动台或应用程序文件夹打开</li>
+        <li>若提示无法打开：对应用 <strong>右键 → 打开</strong>，确认一次即可</li>
+      </ol>
+      <ol class="step-list hidden" id="steps-win">
+        <li>双击下载的 <strong>SpeechEval-Setup.exe</strong></li>
+        <li>按安装向导点击「下一步」完成安装</li>
+        <li>从桌面或开始菜单打开「中文口语评估」</li>
+        <li>若 SmartScreen 提示：点击 <strong>更多信息</strong> → <strong>仍要运行</strong></li>
+      </ol>
+    </section>
+
+    <section class="faq">
+      <h2>常见问题</h2>
+      <details>
+        <summary>需要联网吗？</summary>
+        <p>安装不需要。首次使用「开始评估」时，可能会下载语音识别模型（约几百 MB），之后可离线使用。</p>
+      </details>
+      <details>
+        <summary>支持哪些音频格式？</summary>
+        <p>wav、mp3、m4a、flac、ogg 等常见格式。</p>
+      </details>
+      <details>
+        <summary>Mac 和 Windows 安装包可以互相用吗？</summary>
+        <p>不可以。请下载与您电脑系统对应的版本。</p>
+      </details>
+    </section>
+  </main>
+
+  <footer class="container">
+    <p>中文口语评估 · 本地运行 · 版本 1.0</p>
+  </footer>
+
+  <script src="js/download.js"></script>
+</body>
+</html>

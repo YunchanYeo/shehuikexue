@@ -1,0 +1,29 @@
+# Reference population means and standard deviations for Z-scoring.
+# Calibrate these on your own corpus for meaningful cross-speaker comparison.
+articulation_rate:
+  mean: 4.5
+  std: 0.8
+silent_pause_ratio:
+  mean: 0.15
+  std: 0.08
+filled_pause_density:
+  mean: 0.05
+  std: 0.03
+repetition_repair_density:
+  mean: 0.03
+  std: 0.02
+type_token_ratio:
+  mean: 0.55
+  std: 0.12
+mean_utterance_length:
+  mean: 8.0
+  std: 3.0
+connective_density:
+  mean: 0.08
+  std: 0.04
+pitch_sd:
+  mean: 45.0
+  std: 15.0
+intensity_sd:
+  mean: 0.08
+  std: 0.03

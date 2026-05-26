@@ -1,0 +1,242 @@
+:root {
+  --bg: #f5f6f8;
+  --card: #ffffff;
+  --text: #1a1d26;
+  --muted: #5c6370;
+  --mac: #0071e3;
+  --win: #0078d4;
+  --accent: #c41e3a;
+  --shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+  --radius: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.hero {
+  background: linear-gradient(135deg, #1a1d26 0%, #3d2c4a 50%, #5c2038 100%);
+  color: #fff;
+  padding: 56px 0 48px;
+  text-align: center;
+}
+
+.hero h1 {
+  margin: 0 0 12px;
+  font-size: 2.25rem;
+  font-weight: 700;
+}
+
+.tagline {
+  font-size: 1.125rem;
+  opacity: 0.95;
+  margin: 0 0 8px;
+}
+
+.note {
+  font-size: 0.9rem;
+  opacity: 0.75;
+  margin: 0;
+}
+
+.download-section {
+  padding: 48px 0 32px;
+}
+
+.download-section h2 {
+  text-align: center;
+  margin: 0 0 8px;
+  font-size: 1.5rem;
+}
+
+.hint {
+  text-align: center;
+  color: var(--muted);
+  margin: 0 0 28px;
+  font-size: 0.95rem;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 640px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 32px 28px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 2px solid transparent;
+}
+
+.card.recommended {
+  border-color: var(--accent);
+  transform: scale(1.02);
+}
+
+.platform-icon {
+  font-size: 3rem;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.card h3 {
+  margin: 0 0 4px;
+  font-size: 1.35rem;
+}
+
+.file-type {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin: 0 0 12px;
+}
+
+.desc {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin: 0 0 24px;
+  min-height: 2.8em;
+}
+
+.btn {
+  display: inline-block;
+  padding: 14px 32px;
+  border-radius: 10px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: opacity 0.2s, transform 0.15s;
+}
+
+.btn:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.btn-mac {
+  background: var(--mac);
+}
+
+.btn-win {
+  background: var(--win);
+}
+
+.btn.disabled {
+  pointer-events: none;
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.unavailable {
+  display: block;
+  color: #b45309;
+  font-size: 0.85rem;
+  margin-top: 12px;
+}
+
+.steps {
+  padding: 24px 0 40px;
+}
+
+.steps h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.tab {
+  padding: 8px 24px;
+  border: 1px solid #ddd;
+  background: var(--card);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.tab.active {
+  background: var(--text);
+  color: #fff;
+  border-color: var(--text);
+}
+
+.step-list {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 24px 24px 24px 40px;
+  box-shadow: var(--shadow);
+  margin: 0;
+}
+
+.step-list.hidden {
+  display: none;
+}
+
+.step-list li {
+  margin-bottom: 10px;
+}
+
+.faq {
+  padding-bottom: 48px;
+}
+
+.faq h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+details {
+  background: var(--card);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+details p {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+footer {
+  text-align: center;
+  padding: 24px 0 40px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}

@@ -1,0 +1,12 @@
+.venv/
+.venv-build/
+build/
+dist/
+__pycache__/
+*.pyc
+.DS_Store
+*.wav
+*.mp3
+website/releases/*.dmg
+website/releases/*.exe
+website/releases/*.zip
