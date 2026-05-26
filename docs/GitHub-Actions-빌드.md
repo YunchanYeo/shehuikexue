@@ -12,13 +12,12 @@ Windows PC 없이 **Mac에서 코드를 push**하면, GitHub 클라우드에서 
 ## 1. GitHub에 올리기
 
 ```bash
-cd /path/to/shehuikexue
-git init   # 아직 없다면
-git add .
-git commit -m "Initial commit"
-git remote add origin https://github.com/你的用户名/仓库名.git
+cd /Users/yeoyunchan/Desktop/shehuikexue
+git remote set-url origin https://github.com/YunchanYeo/shehuikexue.git
 git push -u origin main
 ```
+
+저장소를 아직 안 만들었다면 → **[GitHub-저장소-만들기.md](GitHub-저장소-만들기.md)** 먼저 보세요.
 
 ---
 

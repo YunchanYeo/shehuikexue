@@ -42,7 +42,8 @@ scripts\run_app.bat
 
 ### 开发者：打包成 dmg / exe 安装包
 
-**只有 Mac？** 用 **[GitHub Actions](docs/GitHub-Actions-빌드.md)** 在云端同时打出 dmg 与 Windows 安装包（push 后在 Actions 里 Run workflow）。
+**只有 Mac？** 用 **[GitHub Actions](docs/GitHub-Actions-빌드.md)** 在云端同时打出 dmg 与 Windows 安装包。  
+仓库：`https://github.com/YunchanYeo/shehuikexue`（创建与 push 见 [docs/GitHub-저장소-만들기.md](docs/GitHub-저장소-만들기.md)）。
 
 本地打包见 **[docs/打包分发.md](docs/打包分发.md)**（Mac 本地 dmg；Windows 需 Windows 电脑或 Actions）。
 
