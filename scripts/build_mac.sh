@@ -1,62 +1,65 @@
 #!/usr/bin/env bash
-# Build macOS SpeechEval.app + SpeechEval.dmg (run on macOS, Python 3.10–3.12)
+# Mac 本地一键生成 SpeechEval.dmg（无需 GitHub）
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
 if [[ "$(uname)" != "Darwin" ]]; then
-  echo "错误：请在 macOS 上运行此脚本。"
+  echo "请在 macOS 上运行。"
   exit 1
 fi
 
-PY_VER=$(python3 -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
-echo "Python 版本: $PY_VER"
-if python3 -c "import sys; exit(0 if (3,10) <= sys.version_info[:2] <= (3,12) else 1)"; then
-  :
-else
-  echo "警告：建议使用 Python 3.10–3.12。当前版本可能导致打包失败。"
+# 优先使用 3.10–3.12（PyInstaller 兼容更好）
+PYTHON=""
+for cmd in python3.12 python3.11 python3.10 python3; do
+  if command -v "$cmd" &>/dev/null; then
+    if "$cmd" -c "import sys; exit(0 if sys.version_info >= (3, 10) else 1)" 2>/dev/null; then
+      PYTHON="$cmd"
+      break
+    fi
+  fi
+done
+if [[ -z "$PYTHON" ]]; then
+  echo "需要 Python 3.10 或更高: https://www.python.org/downloads/"
+  exit 1
 fi
 
-python3 -m venv .venv-build
-source .venv-build/bin/activate
-pip install -U pip wheel
-pip install -r requirements.txt
-pip install pyinstaller
+echo "使用: $($PYTHON --version)"
 
-echo ">>> PyInstaller 打包 .app …"
+rm -rf .venv-build
+"$PYTHON" -m venv .venv-build
+source .venv-build/bin/activate
+pip install -U pip wheel -q
+pip install -r requirements.txt pyinstaller -q
+
+echo ""
+echo ">>> 正在打包应用（约 10–20 分钟，请耐心等待）…"
 pyinstaller speech_eval.spec --noconfirm --clean
 
 APP_PATH="dist/SpeechEval.app"
 DMG_PATH="dist/SpeechEval.dmg"
 if [[ ! -d "$APP_PATH" ]]; then
-  echo "错误：未找到 $APP_PATH"
+  echo "错误：未生成 $APP_PATH"
   exit 1
 fi
 
-echo ">>> 制作 DMG 安装镜像 …"
+echo ">>> 正在制作 DMG …"
 STAGE="dist/dmg-staging"
 rm -rf "$STAGE" "$DMG_PATH"
 mkdir -p "$STAGE"
 cp -R "$APP_PATH" "$STAGE/"
 ln -s /Applications "$STAGE/Applications"
-
-hdiutil create \
-  -volname "中文口语评估" \
-  -srcfolder "$STAGE" \
-  -ov \
-  -format UDZO \
-  "$DMG_PATH"
-
+hdiutil create -volname "中文口语评估" -srcfolder "$STAGE" -ov -format UDZO "$DMG_PATH" >/dev/null
 rm -rf "$STAGE"
 
+DESKTOP_DMG="$HOME/Desktop/SpeechEval.dmg"
+cp -f "$DMG_PATH" "$DESKTOP_DMG"
+
 echo ""
 echo "=========================================="
-echo " 完成"
-echo "  - 应用程序: $APP_PATH"
-echo "  - 安装镜像: $DMG_PATH   ← 分发给用户"
+echo " 完成！"
+echo "  安装包: $DMG_PATH"
+echo "  已复制到桌面: $DESKTOP_DMG"
 echo "=========================================="
-echo ""
-echo "用户安装：双击 DMG → 将「SpeechEval」拖入「应用程序」"
-echo "若提示无法打开：系统设置 → 隐私与安全性 → 仍要打开"
-echo "（正式发布建议 Apple 开发者账号代码签名与公证）"
-echo ""
-echo "分发: 将 dist/SpeechEval.dmg 发给用户（网盘 / 邮件 / GitHub Releases 等）"
+echo "双击桌面上的 SpeechEval.dmg 即可安装。"
+
+open -R "$DESKTOP_DMG" 2>/dev/null || open dist

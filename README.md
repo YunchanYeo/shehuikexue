@@ -7,16 +7,10 @@
 
 ## 桌面应用（推荐）/ 데스크톱 앱 (권장)
 
-### 最终用户：安装包（无需网站、无需服务器）
+### 最终用户：Mac 安装包
 
-收到安装文件后：
-
-| 系统 | 文件 | 安装 |
-|------|------|------|
-| **macOS** | `SpeechEval.dmg` | 双击 → 拖入「应用程序」 |
-| **Windows** | `SpeechEval-Setup.exe` | 双击 → 按安装向导完成 |
-
-若无法打开 Mac 应用：**右键 → 打开**。Windows SmartScreen：**更多信息 → 仍要运行**。
+收到 **`SpeechEval.dmg`** 后：双击 → 拖入「应用程序」→ 打开。  
+若无法打开：**右键 → 打开**。
 
 **使用步骤（中文界面）：**
 
@@ -40,30 +34,18 @@ scripts\run_app.bat
 
 或：`pip install -r requirements.txt` 后执行 `python app_gui.py`。
 
-### 开发者：打包成 dmg / exe 安装包
+### 制作 Mac 安装包（本地，不用 GitHub）
 
-**只有 Mac？** 用 **[GitHub Actions](docs/GitHub-Actions-빌드.md)** 在云端同时打出 dmg 与 Windows 安装包。  
-仓库：`https://github.com/YunchanYeo/shehuikexue`（创建与 push 见 [docs/GitHub-저장소-만들기.md](docs/GitHub-저장소-만들기.md)）。
+**双击** 项目里的 **`制作安装包.command`**，等待约 10–20 分钟，**桌面会出现 `SpeechEval.dmg`**。
 
-本地打包见 **[docs/打包分发.md](docs/打包分发.md)**（Mac 本地 dmg；Windows 需 Windows 电脑或 Actions）。
+或终端：
 
 ```bash
-# macOS → 生成 dist/SpeechEval.dmg
 chmod +x scripts/build_mac.sh
 ./scripts/build_mac.sh
-
-# Windows（CMD）→ 生成 dist\SpeechEval-Setup.exe
-scripts\build_windows.bat
 ```
 
-| 平台 | 发给用户的文件 |
-|------|----------------|
-| Mac | `dist/SpeechEval.dmg` |
-| Windows | `dist/SpeechEval-Setup.exe`（需 [Inno Setup](https://jrsoftware.org/isdl.php)） |
-
-用网盘、邮件、U 盘或 GitHub Releases 发送即可。详见 **[docs/打包分发.md](docs/打包分发.md)**。
-
-建议 Python **3.10–3.12**。打包体积约 1–3 GB，首次评估仍会下载 Whisper 模型（需联网一次）。
+详见 **[docs/Mac-安装包.md](docs/Mac-安装包.md)**。建议 Python **3.10–3.12**（3.14 可能失败）。
 
 ---
 
