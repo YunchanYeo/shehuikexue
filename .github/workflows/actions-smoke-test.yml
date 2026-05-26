@@ -1,0 +1,17 @@
+# Actions 가 켜져 있는지 확인용 (10초 이내 끝남)
+name: Actions smoke test
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Actions is working on YunchanYeo/shehuikexue"

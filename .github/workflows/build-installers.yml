@@ -1,6 +1,3 @@
-# Mac에서 push만 하면 클라우드에서 dmg + Windows Setup.exe 를 빌드합니다.
-# Actions 탭 → "Build installers" → Run workflow 로 수동 실행도 가능합니다.
-
 name: Build installers
 
 on:
@@ -11,8 +8,9 @@ on:
     tags:
       - "v*"
 
+# 기본은 읽기만. Release 작업만 쓰기 권한 (queue 오류 예방)
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build-macos:
@@ -43,7 +41,7 @@ jobs:
           mkdir -p "$STAGE"
           cp -R dist/SpeechEval.app "$STAGE/"
           ln -s /Applications "$STAGE/Applications"
-          hdiutil create -volname "中文口语评估" -srcfolder "$STAGE" -ov -format UDZO dist/SpeechEval.dmg
+          hdiutil create -volname "SpeechEval" -srcfolder "$STAGE" -ov -format UDZO dist/SpeechEval.dmg
           rm -rf "$STAGE"
           ls -lh dist/SpeechEval.dmg
 
@@ -77,8 +75,11 @@ jobs:
         run: pyinstaller speech_eval.spec --noconfirm --clean
 
       - name: Build installer (Inno Setup)
+        shell: pwsh
         run: |
-          & "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" installer\windows.iss
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) { throw "Inno Setup not found: $iscc" }
+          & $iscc installer\windows.iss
           if (-not (Test-Path dist\SpeechEval-Setup.exe)) { throw "SpeechEval-Setup.exe not found" }
           Get-Item dist\SpeechEval-Setup.exe | Format-List Name, Length
 
@@ -93,6 +94,8 @@ jobs:
     needs: [build-macos, build-windows]
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -111,5 +114,3 @@ jobs:
         with:
           files: release/*
           generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
