@@ -21,13 +21,34 @@ git push -u origin main
 
 ---
 
-## 2. 빌드 실행 (수동, 가장 쉬움)
+## 2. Actions 사용 허용 (처음 한 번)
 
-1. GitHub 저장소 페이지 → **Actions** 탭  
-2. 왼쪽 **「Build installers」** 클릭  
-3. 오른쪽 **「Run workflow」** → **Run workflow**  
-4. 약 **30~60분** 대기 (Windows 쪽이 더 오래 걸릴 수 있음)  
-5. 완료된 실행 클릭 → 아래 **Artifacts** 에서 다운로드:
+**「워크플로우를 실행할 수 없다」** 가 나오면:
+
+1. **Settings** → **Actions** → **General**
+2. **Allow all actions** + **Read and write permissions** → Save
+3. Actions 탭에서 초록색 **enable workflows** 버튼이 있으면 클릭
+
+자세히: **[Actions-실행-안될때.md](Actions-실행-안될때.md)**
+
+---
+
+## 3. 빌드 실행
+
+**방법 A — push 하면 자동（추천）**
+
+```bash
+git commit --allow-empty -m "Trigger build"
+git push
+```
+
+**방법 B — 수동 Run workflow**
+
+1. **Actions** → 왼쪽 **「Build installers」**（이름 클릭）  
+2. 오른쪽 **「Run workflow」** → branch **main** → **Run workflow**
+
+4. 약 **30~60분** 대기  
+5. 완료된 실행 → **Artifacts**:
    - `SpeechEval-macOS` → `.dmg`
    - `SpeechEval-Windows` → `SpeechEval-Setup.exe`
 
@@ -35,7 +56,7 @@ git push -u origin main
 
 ---
 
-## 3. 태그로 Release 만들기 (선택)
+## 4. 태그로 Release 만들기 (선택)
 
 버전을 붙여 배포할 때:
 
@@ -49,7 +70,7 @@ Actions가 돌아간 뒤 **Releases** 탭에 dmg / exe가 자동으로 올라갑
 
 ---
 
-## 4. 자주 묻는 것
+## 5. 자주 묻는 것
 
 **Q：Mac에서 exe를 직접 못 만드는데 이건 되나요?**  
 A：네. Windows 빌드는 GitHub의 `windows-latest` 가상 머신에서 돌아갑니다.
