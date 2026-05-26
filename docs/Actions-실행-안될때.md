@@ -4,6 +4,17 @@
 
 ---
 
+## 「Failed to queue workflow run」빨간 오류
+
+1. https://github.com/YunchanYeo/shehuikexue/settings/actions  
+   → **Allow all actions** + **Read and write permissions** → **Save**
+2. https://github.com/settings/billing → Actions 한도 확인
+3. https://github.com/settings/emails → 이메일 **Verified** 확인
+4. **Actions** → **「Actions smoke test」** → Run workflow（10초 테스트）
+5. 성공 후 **「Build installers」** 실행. Safari 대신 Chrome 시도.
+
+---
+
 ## 1. Actions 켜기（가장 흔한 원인）
 
 1. 저장소 **Settings**（설정）
