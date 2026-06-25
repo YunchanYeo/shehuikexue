@@ -41,9 +41,27 @@ def main() -> int:
         help="Inference device for ASR",
     )
     parser.add_argument(
+        "--no-denoise",
+        action="store_true",
+        help="Skip noise reduction before analysis",
+    )
+    parser.add_argument(
+        "--denoise-strength",
+        type=float,
+        default=0.75,
+        help="Noise reduction strength 0.0-1.0 (default: 0.75)",
+    )
+    parser.add_argument(
         "--json",
         action="store_true",
         help="Print full result as JSON",
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        type=Path,
+        default=None,
+        help="Save text report to a .txt file",
     )
     args = parser.parse_args()
 
@@ -57,13 +75,21 @@ def main() -> int:
         whisper_model=args.whisper_model,
         device=args.device,
         transcript=args.transcript,
+        denoise=not args.no_denoise,
+        denoise_strength=max(0.0, min(1.0, args.denoise_strength)),
     )
 
     if args.json:
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return 0
 
-    print(format_result(result, lang="zh"))
+    report = format_result(result, lang="zh")
+    if args.output:
+        args.output.write_text(report, encoding="utf-8")
+        print(f"已保存：{args.output}")
+        return 0
+
+    print(report)
     return 0
 
 

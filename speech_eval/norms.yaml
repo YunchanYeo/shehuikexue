@@ -1,29 +1,33 @@
-# Reference population means and standard deviations for Z-scoring.
-# Calibrate these on your own corpus for meaningful cross-speaker comparison.
+# Population mean/std for Z = (value - mean) / std.
+# Do not Z-score a single file alone — calibrate on many recordings first.
+_meta:
+  n_samples: 54
+  source: /Users/yeoyunchan/Documents/문서/社会科学/录音
+  note: 由 calibrate_norms.py 根据样本均值/标准差生成，用于 (值−mean)/std
 articulation_rate:
-  mean: 4.5
-  std: 0.8
+  mean: 3.909028860943448
+  std: 0.9551804192938156
 silent_pause_ratio:
-  mean: 0.15
-  std: 0.08
+  mean: 0.08613402029965345
+  std: 0.11687257033573126
 filled_pause_density:
-  mean: 0.05
-  std: 0.03
+  mean: 0.06436472189924808
+  std: 0.039708119136052114
 repetition_repair_density:
-  mean: 0.03
-  std: 0.02
+  mean: 0.004844147729659517
+  std: 0.007619071606806216
 type_token_ratio:
-  mean: 0.55
-  std: 0.12
+  mean: 0.5543879262340733
+  std: 0.11498763022131495
 mean_utterance_length:
-  mean: 8.0
-  std: 3.0
+  mean: 72.61463844797179
+  std: 60.57572822033782
 connective_density:
-  mean: 0.08
-  std: 0.04
+  mean: 0.05350709602488418
+  std: 0.027492371171967914
 pitch_sd:
-  mean: 45.0
-  std: 15.0
+  mean: 466.3829386307472
+  std: 131.85303708028363
 intensity_sd:
-  mean: 0.08
-  std: 0.03
+  mean: 0.04891836394866308
+  std: 0.012011468556878502

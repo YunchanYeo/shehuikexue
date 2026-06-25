@@ -5,19 +5,13 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-import yaml
-
 from .asr import transcribe
-from .audio_metrics import extract_audio_metrics
+from .audio_metrics import extract_audio_metrics_from_array
+from .denoise import load_audio, temp_wav_path
+from .norms import cohort_size, is_calibrated, load_norms, metric_norms
 from .paths import default_norms_path
 from .text_metrics import count_syllables_chinese, extract_text_metrics
-
-
-def _load_norms(norms_path: str | Path | None) -> dict[str, dict[str, float]]:
-    if norms_path is None:
-        norms_path = default_norms_path()
-    with open(norms_path, encoding="utf-8") as f:
-        return yaml.safe_load(f)
+from .zh_convert import to_simplified
 
 
 def z_score(value: float, mean: float, std: float) -> float:
@@ -27,7 +21,7 @@ def z_score(value: float, mean: float, std: float) -> float:
 
 
 def _z(metric: str, value: float, norms: dict) -> float:
-    cfg = norms[metric]
+    cfg = metric_norms(norms, metric)
     return z_score(value, cfg["mean"], cfg["std"])
 
 
@@ -66,33 +60,38 @@ def compute_dimension_scores(metrics: dict[str, float], norms: dict) -> dict[str
     }
 
 
-def evaluate_speech(
+def extract_raw_metrics(
     audio_path: str,
     *,
-    norms_path: str | Path | None = None,
     whisper_model: str = "base",
     device: str = "cpu",
     transcript: str | None = None,
     skip_asr: bool = False,
-) -> dict[str, Any]:
-    """
-    Evaluate one speech audio file.
-
-    Parameters
-    ----------
-    audio_path : path to wav/mp3/flac etc.
-    transcript : if provided, skip ASR
-    skip_asr : use empty transcript (audio-only metrics + zeros for text)
-    """
-    norms = _load_norms(norms_path)
+    denoise: bool = True,
+    denoise_strength: float = 0.75,
+) -> tuple[dict[str, float], str]:
+    """Run ASR (if needed) and return raw metrics + transcript."""
+    y, sr = load_audio(
+        audio_path,
+        denoise=denoise,
+        denoise_strength=denoise_strength,
+    )
 
     if transcript is None and not skip_asr:
-        transcript = transcribe(audio_path, model_size=whisper_model, device=device)
+        with temp_wav_path(y, sr) as clean_path:
+            transcript = transcribe(
+                clean_path,
+                model_size=whisper_model,
+                device=device,
+            )
     elif transcript is None:
         transcript = ""
 
+    if transcript:
+        transcript = to_simplified(transcript)
+
     syllables = count_syllables_chinese(transcript)
-    audio = extract_audio_metrics(audio_path, syllable_count=syllables)
+    audio = extract_audio_metrics_from_array(y, sr, syllable_count=syllables)
     text = extract_text_metrics(transcript)
 
     metrics = {
@@ -108,13 +107,49 @@ def evaluate_speech(
         "duration_sec": audio["duration_sec"],
         "speech_duration_sec": audio["speech_duration_sec"],
         "syllable_count": float(syllables),
+        "denoise_applied": 1.0 if denoise else 0.0,
     }
+    return metrics, transcript
+
+
+def evaluate_speech(
+    audio_path: str,
+    *,
+    norms_path: str | Path | None = None,
+    whisper_model: str = "base",
+    device: str = "cpu",
+    transcript: str | None = None,
+    skip_asr: bool = False,
+    denoise: bool = True,
+    denoise_strength: float = 0.75,
+) -> dict[str, Any]:
+    """
+    Evaluate one speech audio file.
+
+    Z-scores use population mean/std from norms.yaml (many samples), not from
+    this file alone. Calibrate with calibrate_norms.py first.
+    """
+    if norms_path is None:
+        norms_path = default_norms_path()
+    norms = load_norms(norms_path)
+
+    metrics, transcript = extract_raw_metrics(
+        audio_path,
+        whisper_model=whisper_model,
+        device=device,
+        transcript=transcript,
+        skip_asr=skip_asr,
+        denoise=denoise,
+        denoise_strength=denoise_strength,
+    )
 
     scores = compute_dimension_scores(metrics, norms)
 
     return {
         "audio_path": str(audio_path),
         "transcript": transcript,
+        "denoise": denoise,
+        "denoise_strength": denoise_strength if denoise else 0.0,
         "raw_metrics": metrics,
         "scores": {
             "fluency": scores["fluency"],
@@ -123,4 +158,9 @@ def evaluate_speech(
             "total": scores["total"],
         },
         "z_scores": scores["z_scores"],
+        "norms": {
+            "path": str(norms_path),
+            "cohort_n": cohort_size(norms),
+            "calibrated": is_calibrated(norms),
+        },
     }

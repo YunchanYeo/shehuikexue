@@ -4,6 +4,11 @@ from __future__ import annotations
 
 from functools import lru_cache
 
+from .zh_convert import to_simplified
+
+# Bias Whisper toward mainland Mandarin + simplified characters in output.
+_SIMPLIFIED_PROMPT = "以下是普通话简体中文口语转写。"
+
 
 @lru_cache(maxsize=2)
 def _get_model(model_size: str, device: str):
@@ -25,5 +30,7 @@ def transcribe(
         language=language,
         vad_filter=True,
         beam_size=5,
+        initial_prompt=_SIMPLIFIED_PROMPT,
     )
-    return "".join(seg.text.strip() for seg in segments).strip()
+    raw = "".join(seg.text.strip() for seg in segments).strip()
+    return to_simplified(raw)

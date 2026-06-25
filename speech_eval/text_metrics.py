@@ -62,7 +62,8 @@ CONNECTIVES = [
     "为了",
 ]
 
-SENTENCE_END = re.compile(r"[。！？；\n]+")
+# Oral ASR often omits 。；treat clause breaks as utterance boundaries too.
+SENTENCE_END = re.compile(r"[。！？；\n，、]+")
 
 
 def count_syllables_chinese(text: str) -> int:

@@ -7,4 +7,12 @@ if [[ ! -d .venv ]]; then
   .venv/bin/pip install -r requirements.txt
 fi
 source .venv/bin/activate
-python app_gui.py
+if [[ "${1:-}" == "web" ]]; then
+  python app_gui.py --web
+else
+  python app_gui.py || {
+    echo ""
+    echo "데스크톱 클라이언트 다운로드 실패 시 브라우저 모드로 재시도합니다…"
+    python app_gui.py --web
+  }
+fi

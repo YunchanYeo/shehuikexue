@@ -5,16 +5,13 @@ from __future__ import annotations
 import numpy as np
 import librosa
 
+from .denoise import load_audio
+
 
 SILENCE_THRESHOLD_DB = 35  # frames below peak-RMS by this dB count as silent
 MIN_PAUSE_SEC = 0.2
 FRAME_LENGTH = 2048
 HOP_LENGTH = 512
-
-
-def _load_mono(path: str, sr: int = 16000) -> tuple[np.ndarray, int]:
-    y, sr_out = librosa.load(path, sr=sr, mono=True)
-    return y, sr_out
 
 
 def _rms_frames(y: np.ndarray, sr: int) -> tuple[np.ndarray, float]:
@@ -97,8 +94,9 @@ def intensity_sd(y: np.ndarray, sr: int) -> float:
     return float(np.std(rms))
 
 
-def extract_audio_metrics(path: str, syllable_count: int) -> dict[str, float]:
-    y, sr = _load_mono(path)
+def extract_audio_metrics_from_array(
+    y: np.ndarray, sr: int, syllable_count: int
+) -> dict[str, float]:
     return {
         "articulation_rate": articulation_rate(syllable_count, y, sr),
         "silent_pause_ratio": silent_pause_ratio(y, sr),
@@ -107,3 +105,14 @@ def extract_audio_metrics(path: str, syllable_count: int) -> dict[str, float]:
         "duration_sec": len(y) / sr,
         "speech_duration_sec": speech_duration(y, sr),
     }
+
+
+def extract_audio_metrics(
+    path: str,
+    syllable_count: int,
+    *,
+    denoise: bool = True,
+    denoise_strength: float = 0.75,
+) -> dict[str, float]:
+    y, sr = load_audio(path, denoise=denoise, denoise_strength=denoise_strength)
+    return extract_audio_metrics_from_array(y, sr, syllable_count)

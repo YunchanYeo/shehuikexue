@@ -18,6 +18,7 @@ pkg_datas = [(str(root / "speech_eval" / "norms.yaml"), "speech_eval")]
 flet_datas, flet_binaries, flet_hidden = collect_all("flet")
 
 hidden = [
+    "noisereduce",
     "faster_whisper",
     "ctranslate2",
     "yaml",
