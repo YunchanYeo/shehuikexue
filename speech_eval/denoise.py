@@ -6,6 +6,7 @@ import os
 import tempfile
 from contextlib import contextmanager
 from pathlib import Path
+from typing import cast
 
 import librosa
 import numpy as np
@@ -21,7 +22,8 @@ def _highpass(y: np.ndarray, sr: int, cutoff: float = HIGHPASS_HZ) -> np.ndarray
         return y
     nyq = sr / 2.0
     freq = min(cutoff / nyq, 0.99)
-    b, a = butter(2, freq, btype="high")
+    coef = cast(tuple[np.ndarray, np.ndarray], butter(2, freq, btype="high"))
+    b, a = coef
     return filtfilt(b, a, y).astype(np.float32)
 
 
@@ -85,10 +87,11 @@ def load_audio(
     denoise_strength: float = 0.75,
 ) -> tuple[np.ndarray, int]:
     y, sr_out = librosa.load(str(path), sr=sr, mono=True)
+    sr_int = int(sr_out)
     y = y.astype(np.float32)
     if denoise:
-        y = denoise_waveform(y, sr_out, strength=denoise_strength)
-    return y, sr_out
+        y = denoise_waveform(y, sr_int, strength=denoise_strength)
+    return y, sr_int
 
 
 def write_temp_wav(y: np.ndarray, sr: int) -> str:

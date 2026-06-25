@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Desktop app for Chinese speech evaluation (local, no server)."""
+# pyright: reportArgumentType=false, reportAttributeAccessIssue=false
 
 from __future__ import annotations
 
@@ -23,7 +24,7 @@ AUDIO_EXTENSIONS = ["wav", "mp3", "m4a", "flac", "ogg", "aac", "wma"]
 
 def _detect_device() -> str:
     try:
-        import torch
+        import torch  # type: ignore[import-not-found]
 
         if torch.cuda.is_available():
             return "cuda"
@@ -199,9 +200,9 @@ async def main(page: ft.Page) -> None:
         transcript_field.disabled = not manual_cb.value
         page.update()
 
-    def on_copy(_: ft.ControlEvent) -> None:
+    async def on_copy(_: ft.ControlEvent) -> None:
         if result_field.value:
-            page.set_clipboard(result_field.value)
+            await page.clipboard.set(result_field.value)
             set_status("报告已复制到剪贴板")
 
     async def on_save_txt(_: ft.ControlEvent) -> None:
@@ -241,7 +242,7 @@ async def main(page: ft.Page) -> None:
             whisper_model=model_dd.value or "base",
             device=device,
             transcript=(transcript_field.value or "").strip() if manual_cb.value else None,
-            denoise=denoise_cb.value,
+            denoise=bool(denoise_cb.value),
         )
 
     def on_eval_done(result: dict[str, Any]) -> None:

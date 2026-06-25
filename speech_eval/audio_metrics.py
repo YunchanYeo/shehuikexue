@@ -75,8 +75,8 @@ def pitch_sd(y: np.ndarray, sr: int) -> float:
     """Standard deviation of F0 (Hz) on voiced frames."""
     f0 = librosa.yin(
         y,
-        fmin=librosa.note_to_hz("C2"),
-        fmax=librosa.note_to_hz("C7"),
+        fmin=float(librosa.note_to_hz("C2")),
+        fmax=float(librosa.note_to_hz("C7")),
         sr=sr,
         frame_length=FRAME_LENGTH,
     )

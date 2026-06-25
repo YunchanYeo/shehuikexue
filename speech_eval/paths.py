@@ -8,7 +8,10 @@ from pathlib import Path
 
 def package_dir() -> Path:
     if getattr(sys, "frozen", False):
-        return Path(sys._MEIPASS) / "speech_eval"
+        bundle_root = getattr(sys, "_MEIPASS", None)
+        if bundle_root is None:
+            raise RuntimeError("PyInstaller bundle root (_MEIPASS) not found")
+        return Path(bundle_root) / "speech_eval"
     return Path(__file__).resolve().parent
 
 
