@@ -7,6 +7,8 @@ __pycache__/
 .DS_Store
 *.wav
 *.mp3
+*.m4a
+*.flac
 website/releases/*.dmg
 website/releases/*.exe
 website/releases/*.zip

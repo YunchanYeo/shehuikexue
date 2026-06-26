@@ -2,7 +2,7 @@
 
 ## 方法一：双击（最简单）
 
-1. 在 Finder 中打开项目文件夹 `shehuikexue`
+1. 在 Finder 中打开项目文件夹 `kouyu`（克隆后的目录名）
 2. **双击** `制作安装包.command`
 3. 若提示「无法打开」：**右键 → 打开** → 确认
 4. 等待约 **10–20 分钟**（窗口会显示进度）
@@ -11,7 +11,8 @@
 ## 方法二：终端
 
 ```bash
-cd /Users/yeoyunchan/Desktop/shehuikexue
+git clone https://github.com/YunchanYeo/kouyu.git
+cd kouyu
 ./scripts/build_mac.sh
 ```
 

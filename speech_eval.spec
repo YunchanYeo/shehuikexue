@@ -84,7 +84,7 @@ if sys.platform == "darwin":
         coll,
         name="SpeechEval.app",
         icon=None,
-        bundle_identifier="com.shehuikexue.speecheval",
+        bundle_identifier="com.kouyu.speecheval",
         info_plist={
             "CFBundleDisplayName": "中文口语评估",
             "NSHighResolutionCapable": True,

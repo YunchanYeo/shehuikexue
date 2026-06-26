@@ -38,7 +38,7 @@ echo ">>> 正在打包（约 15–25 分钟）…"
 flet pack app_gui.py \
   -n SpeechEval \
   --product-name "中文口语评估" \
-  --bundle-id com.shehuikexue.speecheval \
+  --bundle-id com.kouyu.speecheval \
   --add-data "speech_eval/norms.yaml:speech_eval" \
   --hidden-import speech_eval \
   --hidden-import speech_eval.scoring \

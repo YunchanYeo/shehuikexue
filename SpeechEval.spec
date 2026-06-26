@@ -40,5 +40,5 @@ app = BUNDLE(
     exe,
     name='SpeechEval.app',
     icon=None,
-    bundle_identifier='com.shehuikexue.speecheval',
+    bundle_identifier='com.kouyu.speecheval',
 )
